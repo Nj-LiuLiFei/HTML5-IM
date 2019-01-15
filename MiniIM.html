@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>轻聊IM</title>
+    <style>
+        *{
+            padding: 0px;
+            margin: 0px;
+            box-sizing: border-box;
+        }
+        html,body{
+            width: 100%;
+            height: 100%;
+            background: #c5dcea;
+        }
+        body{
+            padding-top: 50px;
+            font-family: Helvetica Neue,Helvetica,PingFang SC,Tahoma,Arial,sans-serif;
+        }
+        #main{
+            position: relative;
+            width: 900px;
+            height: 650px;
+            margin: auto auto;
+            border: 1px solid #e5e5e5;
+            background: #ffffff;
+        }
+        #main .left-wrap,
+        #main .right-wrap{
+            float:left;
+            height: 100%;
+        }
+        #main .left-wrap{
+            width: 260px;
+            padding: 10px 15px;
+            background: #454754;
+        }
+        #main .right-wrap{
+            width: 638px;
+        }
+        .left-wrap .title{
+            text-align: center;
+            color: #ffffff;
+            height: 30px;
+            line-height: 30px;
+        }
+        #main .user-list{
+            list-style: none;
+            color: #ffffff;
+            height: 548px;
+            overflow: auto;
+        }
+        .user-list li{
+            height: 60px;
+            line-height: 60px;
+        }
+        .user-list li img{
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            vertical-align: middle;
+            margin-right: 20px;
+        }
+        .user-list::-webkit-scrollbar {/*滚动条整体样式*/
+            width: 6px;     /*高宽分别对应横竖滚动条的尺寸*/
+        }
+        .user-list::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+            border-radius: 3px;
+            background: #5b5f71;
+        }
+        .user-list::-webkit-scrollbar-track {/*滚动条里面轨道*/
+            background: transparent;
+        }
+        .user-list::-webkit-scrollbar-thumb:hover {
+            background-color: #CCC;
+        }
+        .right-wrap .title{
+            height: 40px;
+            line-height: 40px;
+            padding-left: 15px;
+            font-size: 18px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        .content-box{
+            position: relative;
+            height: 458px;
+            width: 100%;
+            padding:15px 0px;
+            overflow: auto;
+            background: #ececec;
+        }
+        .input-box{
+            height: 130px;
+            border-top: 1px solid #eaeaea;
+        }
+        .im-list::-webkit-scrollbar {/*滚动条整体样式*/
+            width:8px;     /*高宽分别对应横竖滚动条的尺寸*/
+        }
+        .im-list::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+            border-radius: 4px;
+            background: #cccccc;
+            visibility: hidden;
+        }
+        .im-list::-webkit-scrollbar-thumb:hover {
+            background-color: #c1c1c1;
+        }
+        .im-list:hover::-webkit-scrollbar-thumb{
+            visibility: visible;
+        }
+        .im-list::-webkit-scrollbar-track {/*滚动条里面轨道*/
+            background: #f1f1f1;
+            visibility: hidden;
+        }
+        .im-list::-webkit-scrollbar-track:hover{
+            visibility: visible;
+        }
+
+        .input-box{
+            padding: 0px 15px;
+        }
+        .input-box .tool-box{
+            height: 40px;
+            line-height: 40px;
+        }
+        .tool-box .icon{
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            overflow: hidden;
+            vertical-align: middle;
+            background-repeat: no-repeat;
+            cursor: pointer;
+        }
+        .tool-box .icon-emot{
+            background-image: url(1123.png);
+            background-position: -198px 0;
+        }
+        .tool-box .icon-emot:hover{
+            background-position: -250px 0px;
+        }
+        .input-box .input-div{
+            height: 69px;
+            border: 1px solid #e7e7e7;
+            box-shadow: inset 0 2px 4px 0 rgba(0,0,0,.04);
+        }
+        .input-div{
+            color: #777;
+            line-height: 20px;
+            padding: 3px 8px 5px;
+            font-size: 14px;
+            border: none;
+            word-break: break-word;
+            word-wrap: break-word;
+            outline: none;
+            cursor: text;
+            overflow: hidden;
+            overflow-y: auto;
+        }
+        .input-div::-webkit-scrollbar {/*滚动条整体样式*/
+            width:8px;     /*高宽分别对应横竖滚动条的尺寸*/
+        }
+        .input-div::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+            border-radius: 4px;
+            background: #cccccc;
+        }
+        .input-div::-webkit-scrollbar-thumb:hover {
+            background-color: #c1c1c1;
+        }
+        .input-div::-webkit-scrollbar-track {/*滚动条里面轨道*/
+            background: #f1f1f1;
+        }
+        .input-box .ops-box{
+            height: 40px;
+            line-height: 40px;
+        }
+        .ops-box .evt_click{
+            position: relative;
+            float: right;
+            top: 6px;
+            width: 77px;
+            height: 28px;
+            line-height: 28px;
+            font-size: 14px;
+            border-radius: 2px;
+            color: #fff;
+            border: 1px solid #1ca5fc;
+            background-color: #1ca5fc;
+            cursor: pointer;
+        }
+        .im-list{
+            padding: 0px 15px;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            overflow-y: auto;
+            list-style: none;
+        }
+        .im-list li{
+            margin-top:20px;
+        }
+        .im-list li:after{
+            display: block;
+            width: 100%;
+            height: 0px;
+            content: '';
+            clear: both;
+        }
+        .im-list .other{
+
+        }
+        .im-list .other .user-head-portraits,
+        .im-list .other .user-ms{
+            float: left;
+        }
+        .im-list .other .user-head-portraits{
+            margin-right:10px;
+        }
+        .im-list .other .user-name{
+            text-align: left;
+        }
+        .im-list .other .user-content{
+            background: #a2e65b;
+
+        }
+        .im-list .other .user-content:after{
+            left: -7px;
+            top: 12px;
+            border-width:8px 8px 8px 0;
+            border-style:solid;
+            border-color:transparent #a2e65b transparent transparent;/*透明 灰 透明 透明 */
+        }
+
+        .im-list .oneself .user-head-portraits,
+        .im-list .oneself .user-ms{
+            float: right;
+        }
+        .im-list .oneself .user-head-portraits{
+            margin-left: 10px;
+        }
+        .im-list .oneself .user-name{
+            text-align: right;
+            display: none;
+        }
+        .im-list .oneself .user-content{
+            background: #ffffff;
+        }
+        .im-list .oneself .user-content:after{
+            left: 100%;
+            top: 17px;
+            border-width:8px 0px 8px 8px;
+            border-style:solid;
+            border-color:transparent  transparent  transparent #ffffff;/*透明 灰 透明 透明 */
+        }
+        .im-list .user-head-portraits{
+            width: 50px;
+            height: 50px;
+            border-radius: 4px;
+        }
+        .im-list .user-ms{
+            max-width: 540px;
+            word-wrap:break-word;
+        }
+        .user-ms .user-name{
+            font-size: 12px;
+            color: #a7a7a7;
+            margin-bottom: 5px;
+        }
+        .user-ms .user-content{
+            position: relative;
+            padding: 10px;
+            border-radius:5px;
+            color: #232323;
+            font-size: 15px;
+            min-height: 50px;
+            line-height: 30px;
+        }
+        .user-content:after{
+            display: block;
+            position: absolute;
+            content: " ";
+            width:0;
+            height:0;
+        }
+    </style>
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+</head>
+<body>
+<div id="main">
+    <div class="left-wrap">
+        <div class="title">在线人员</div>
+        <ul class="user-list">
+            <li><img src="1122.jpg">190.168.80.140</li>
+            <li><img src="1122.jpg">190.168.80.140</li>
+        </ul>
+    </div>
+    <div class="right-wrap">
+        <div class="title">聊天室</div>
+        <div class="content-box">
+            <ul class="im-list">
+                <li  class="oneself">
+                    <img class="user-head-portraits" src="1122.jpg">
+                    <div class="user-ms">
+                        <div class="user-name">190.168.80.140</div>
+                        <div class="user-content">猜猜我是谁？</div>
+                    </div>
+                </li>
+                <li  class="other">
+                    <img class="user-head-portraits" src="1122.jpg">
+                    <div class="user-ms">
+                        <div class="user-name">190.168.80.140</div>
+                        <div class="user-content">我是你爸爸！SB</div>
+                    </div>
+                </li>
+                <li  class="other">
+                    <img class="user-head-portraits" src="1122.jpg">
+                    <div class="user-ms">
+                        <div class="user-name">190.168.80.140</div>
+                        <div class="user-content">心慌意乱的我，脑袋里突然冒出了一个想法</div>
+                    </div>
+                </li>
+                <li  class="oneself">
+                    <img class="user-head-portraits" src="1122.jpg">
+                    <div class="user-ms">
+                        <div class="user-name">190.168.80.140</div>
+                        <div class="user-content">心慌意乱的我，脑袋里突然冒出了一个想法，会不会在书包里？我将书包的每</div>
+                    </div>
+                </li>
+                <li  class="other">
+                    <img class="user-head-portraits" src="1122.jpg">
+                    <div class="user-ms">
+                        <div class="user-name">190.168.80.140</div>
+                        <div class="user-content">心慌意乱的我，脑袋里突然冒出了一个想法，会不会在书包里？我将书包的每个夹层都找了一遍，</div>
+                    </div>
+                </li>
+                <li  class="oneself">
+                    <img class="user-head-portraits" src="1122.jpg">
+                    <div class="user-ms">
+                        <div class="user-name">190.168.80.140</div>
+                        <div class="user-content">
+                            心慌意乱的我，脑袋里突然冒出了一个想法，会不会在书包里？我将书包的每个夹层都找了一遍，还是没有！我心里空空的，要知道，妈妈上周日才为我充了100元在卡里。这时，我又起身将所有的房间找了一遍，可还是没有。
+                            　　尽管我知道，课外班的书包里一定不会有车卡，但我还是怀着期待的心情，将课外班的书包里里里外外翻了一遍，的确没有。这下可怎么办？
+                        </div>
+                    </div>
+                </li>
+                <li  class="other">
+                    <img class="user-head-portraits" src="1122.jpg">
+                    <div class="user-ms">
+                        <div class="user-name">190.168.80.140</div>
+                        <div class="user-content">
+                            心慌意乱的我，脑袋里突然冒出了一个想法，会不会在书包里？我将书包的每个夹层都找了一遍，还是没有！我心里空空的，要知道，妈妈上周日才为我充了100元在卡里。这时，我又起身将所有的房间找了一遍，可还是没有。
+                            　　尽管我知道，课外班的书包里一定不会有车卡，但我还是怀着期待的心情，将课外班的书包里里里外外翻了一遍，的确没有。这下可怎么办？
+                        </div>
+                    </div>
+                </li>
+                <li  class="other">
+                    <img class="user-head-portraits" src="1122.jpg">
+                    <div class="user-ms">
+                        <div class="user-name">190.168.80.140</div>
+                        <div class="user-content">
+                            心慌意乱的我，脑袋里突然冒出了一个想法，会不会在书包里？我将书包的每个夹层都找了一遍，还是没有！我心里空空的，要知道，妈妈上周日才为我充了100元在卡里。这时，我又起身将所有的房间找了一遍，可还是没有。
+                            　　尽管我知道，课外班的书包里一定不会有车卡，但我还是怀着期待的心情，将课外班的书包里里里外外翻了一遍，的确没有。这下可怎么办？
+                        </div>
+                    </div>
+                </li>
+                <li  class="other">
+                    <img class="user-head-portraits" src="1122.jpg">
+                    <div class="user-ms">
+                        <div class="user-name">190.168.80.140</div>
+                        <div class="user-content">
+                            心慌意乱的我，脑袋里突然冒出了一个想法，会不会在书包里？我将书包的每个夹层都找了一遍，还是没有！我心里空空的，要知道，妈妈上周日才为我充了100元在卡里。这时，我又起身将所有的房间找了一遍，可还是没有。
+                            　　尽管我知道，课外班的书包里一定不会有车卡，但我还是怀着期待的心情，将课外班的书包里里里外外翻了一遍，的确没有。这下可怎么办？
+                        </div>
+                    </div>
+                </li>
+                <li  class="oneself">
+                    <img class="user-head-portraits" src="1122.jpg">
+                    <div class="user-ms">
+                        <div class="user-name">190.168.80.140</div>
+                        <div class="user-content">
+                            心慌意乱的我，脑袋里突然冒出了一个想法，会不会在书包里？我将书包的每个夹层都找了一遍，还是没有！我心里空空的，要知道，妈妈上周日才为我充了100元在卡里。这时，我又起身将所有的房间找了一遍，可还是没有。
+                            　　尽管我知道，课外班的书包里一定不会有车卡，但我还是怀着期待的心情，将课外班的书包里里里外外翻了一遍，的确没有。这下可怎么办？
+                        </div>
+                    </div>
+                </li>
+                <li  class="other">
+                    <img class="user-head-portraits" src="1122.jpg">
+                    <div class="user-ms">
+                        <div class="user-name">190.168.80.140</div>
+                        <div class="user-content">
+                            心慌意乱的我，脑袋里突然冒出了一个想法，会不会在书包里？我将书包的每个夹层都找了一遍，还是没有！我心里空空的，要知道，妈妈上周日才为我充了100元在卡里。这时，我又起身将所有的房间找了一遍，可还是没有。
+                            　　尽管我知道，课外班的书包里一定不会有车卡，但我还是怀着期待的心情，将课外班的书包里里里外外翻了一遍，的确没有。这下可怎么办？
+                        </div>
+                    </div>
+                </li>
+                <li  class="other">
+                    <img class="user-head-portraits" src="1122.jpg">
+                    <div class="user-ms">
+                        <div class="user-name">190.168.80.140</div>
+                        <div class="user-content">
+                            心慌意乱的我，脑袋里突然冒出了一个想法，会不会在书包里？我将书包的每个夹层都找了一遍，还是没有！我心里空空的，要知道，妈妈上周日才为我充了100元在卡里。这时，我又起身将所有的房间找了一遍，可还是没有。
+                            　　尽管我知道，课外班的书包里一定不会有车卡，但我还是怀着期待的心情，将课外班的书包里里里外外翻了一遍，的确没有。这下可怎么办？
+                        </div>
+                    </div>
+                </li>
+                <li  class="other">
+                    <img class="user-head-portraits" src="1122.jpg">
+                    <div class="user-ms">
+                        <div class="user-name">190.168.80.140</div>
+                        <div class="user-content">
+                            心慌意乱的我，脑袋里突然冒出了一个想法，会不会在书包里？我将书包的每个夹层都找了一遍，还是没有！我心里空空的，要知道，妈妈上周日才为我充了100元在卡里。这时，我又起身将所有的房间找了一遍，可还是没有。
+                            　　尽管我知道，课外班的书包里一定不会有车卡，但我还是怀着期待的心情，将课外班的书包里里里外外翻了一遍，的确没有。这下可怎么办？
+                        </div>
+                    </div>
+                </li>
+                <li  class="oneself">
+                    <img class="user-head-portraits" src="1122.jpg">
+                    <div class="user-ms">
+                        <div class="user-name">190.168.80.140</div>
+                        <div class="user-content">
+                            心慌意乱的我，脑袋里突然冒出了一个想法，会不会在书包里？我将书包的每个夹层都找了一遍，还是没有！我心里空空的，要知道，妈妈上周日才为我充了100元在卡里。这时，我又起身将所有的房间找了一遍，可还是没有。
+                            　　尽管我知道，课外班的书包里一定不会有车卡，但我还是怀着期待的心情，将课外班的书包里里里外外翻了一遍，的确没有。这下可怎么办？
+                        </div>
+                    </div>
+                </li>
+                <li  class="other">
+                    <img class="user-head-portraits" src="1122.jpg">
+                    <div class="user-ms">
+                        <div class="user-name">190.168.80.140</div>
+                        <div class="user-content">
+                            心慌意乱的我，脑袋里突然冒出了一个想法，会不会在书包里？我将书包的每个夹层都找了一遍，还是没有！我心里空空的，要知道，妈妈上周日才为我充了100元在卡里。这时，我又起身将所有的房间找了一遍，可还是没有。
+                            　　尽管我知道，课外班的书包里一定不会有车卡，但我还是怀着期待的心情，将课外班的书包里里里外外翻了一遍，的确没有。这下可怎么办？
+                        </div>
+                    </div>
+                </li>
+                <li  class="other">
+                    <img class="user-head-portraits" src="1122.jpg">
+                    <div class="user-ms">
+                        <div class="user-name">190.168.80.140</div>
+                        <div class="user-content">
+                            心慌意乱的我，脑袋里突然冒出了一个想法，会不会在书包里？我将书包的每个夹层都找了一遍，还是没有！我心里空空的，要知道，妈妈上周日才为我充了100元在卡里。这时，我又起身将所有的房间找了一遍，可还是没有。
+                            　　尽管我知道，课外班的书包里一定不会有车卡，但我还是怀着期待的心情，将课外班的书包里里里外外翻了一遍，的确没有。这下可怎么办？
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="input-box">
+            <div class="tool-box">
+                <i class="icon icon-emot"></i>
+            </div>
+            <div class="input-div" id="messageInputBox" contentEditable="true" spellcheck="false"></div>
+            <div class="ops-box">
+                <button  class="evt_click" onclick="sendMessage();">发表</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var ws = new WebSocket("ws://localhost:8040/imWebSocketServer");
+    ws.onopen = function(){
+        ws.send("发送数据");
+        alert("数据发送中...");
+    };
+
+    ws.onmessage = function (evt){
+        var received_msg = evt.data;
+        alert("数据已接收...");
+    };
+    ws.onclose = function(){
+        // 关闭 websocket
+        alert("连接已关闭...");
+    }
+    function sendMessage() {
+        ws.send($("#messageInputBox").html());
+    }
+    $(function () {
+
+    });
+</script>
+</body>
+</html>
